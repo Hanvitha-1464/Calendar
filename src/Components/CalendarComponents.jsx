@@ -16,9 +16,7 @@ export function SpiralBinding({ accent, pinColor }) {
       {[...Array(15)].map((_, i) => (
         <div
           key={i}
-          style={{ width: 24, height: 32, position: "relative", cursor: "pointer", transition: "transform 0.2s ease" }}
-          onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.1) rotate(5deg)"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1) rotate(0deg)"; }}
+          style={{ width: 24, height: 32, position: "relative", transition: "transform 0.2s ease" }}
         >
           <div style={{
             position: "absolute", top: 0, left: "50%",
@@ -63,19 +61,21 @@ export function PageCorner({ accent, onClick }) {
     <div
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
+      onTouchStart={() => setHov(true)}
+      onTouchEnd={() => setHov(false)}
       onClick={onClick}
       title="Next month →"
       style={{
         position: "absolute", bottom: 0, right: 0, cursor: "pointer", zIndex: 5,
-        width: hov ? 64 : 38, height: hov ? 64 : 38,
+        width: hov ? 64 : 48, height: hov ? 64 : 48,
         transition: "all .25s ease",
         background: `linear-gradient(225deg, ${accent} 0%, ${accent}cc 55%, transparent 55%)`,
         clipPath: "polygon(100% 0%,100% 100%,0% 100%)",
         display: "flex", alignItems: "flex-end", justifyContent: "flex-end",
-        padding: "7px 7px",
+        padding: "10px 10px",
       }}
     >
-      <span style={{ color: "#fff", fontSize: 12, opacity: hov ? 1 : 0, transition: "opacity .2s", fontWeight: "bold" }}>›</span>
+      <span style={{ color: "#fff", fontSize: 16, opacity: hov ? 1 : 0.7, transition: "opacity .2s", fontWeight: "bold" }}>›</span>
     </div>
   );
 }
@@ -85,12 +85,12 @@ export function MoodStrip({ mood, quote, accent }) {
     <div style={{
       background: `linear-gradient(90deg,${accent}1a,${accent}06)`,
       borderBottom: `1px solid ${accent}2a`,
-      padding: "7px 20px",
+      padding: "8px 16px",
       display: "flex", alignItems: "center", justifyContent: "space-between",
       flexWrap: "wrap", gap: 6,
     }}>
       <span style={{ fontSize: 12, color: accent, fontWeight: "bold", fontFamily: "monospace", letterSpacing: .5 }}>{mood}</span>
-      <span style={{ fontSize: 11, color: "#999", fontStyle: "italic", fontFamily: "Georgia,serif" }}>"{quote}"</span>
+      <span style={{ fontSize: 11, color: "#999", fontStyle: "italic", fontFamily: "Georgia,serif", textAlign: "right" }}>"{quote}"</span>
     </div>
   );
 }
@@ -121,12 +121,15 @@ export function EventModal({ accent, onClose, onAdd, defaultFrom, defaultTo }) {
     <div style={{
       position: "fixed", inset: 0, background: "rgba(0,0,0,.45)",
       display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200,
+      padding: "16px",
     }} onClick={e => e.target === e.currentTarget && onClose()}>
       <div style={{
-        background: "#faf8f5", borderRadius: 10, padding: "22px 24px",
-        width: 340, maxWidth: "95vw",
+        background: "#faf8f5", borderRadius: 10, padding: "20px",
+        width: "100%", maxWidth: 340,
         boxShadow: "0 8px 40px rgba(0,0,0,.4)",
         fontFamily: "monospace",
+        maxHeight: "90vh",
+        overflowY: "auto",
       }}>
         <p style={{ fontSize: 13, fontWeight: "bold", color: accent, marginBottom: 14, letterSpacing: 1 }}>
           New Event
@@ -135,11 +138,12 @@ export function EventModal({ accent, onClose, onAdd, defaultFrom, defaultTo }) {
         <div style={{ display: "flex", gap: 0, marginBottom: 16, borderRadius: 6, overflow: "hidden", border: `1.5px solid ${accent}44` }}>
           {["range", "repeat"].map(t => (
             <button key={t} onClick={() => setTab(t)} style={{
-              flex: 1, padding: "6px 0", fontSize: 11, cursor: "pointer", border: "none",
+              flex: 1, padding: "8px 0", fontSize: 11, cursor: "pointer", border: "none",
               background: tab === t ? accent : "transparent",
               color: tab === t ? "#fff" : "#888",
               fontFamily: "monospace", letterSpacing: 1, fontWeight: "bold",
               transition: "background .15s",
+              minHeight: "44px",
             }}>
               {t === "range" ? "Date Range" : "Repeat Weekly"}
             </button>
@@ -153,8 +157,9 @@ export function EventModal({ accent, onClose, onAdd, defaultFrom, defaultTo }) {
           placeholder={tab === "range" ? "e.g. Goa Trip" : "e.g. Weekly Standup"}
           style={{
             width: "100%", border: `1.5px solid ${accent}44`, borderRadius: 4,
-            padding: "7px 9px", fontFamily: "Georgia,serif", fontSize: 13,
+            padding: "10px", fontFamily: "Georgia,serif", fontSize: 14,
             background: "#fff", marginBottom: 10, boxSizing: "border-box",
+            minHeight: "44px",
           }}
         />
 
@@ -163,8 +168,9 @@ export function EventModal({ accent, onClose, onAdd, defaultFrom, defaultTo }) {
             <label style={{ fontSize: 10, color: "#888", display: "block", marginBottom: 3, letterSpacing: 1, textTransform: "uppercase" }}>Repeat every</label>
             <select value={weekday} onChange={e => setWeekday(e.target.value)} style={{
               width: "100%", border: `1.5px solid ${accent}44`, borderRadius: 4,
-              padding: "7px 9px", fontFamily: "monospace", fontSize: 12,
+              padding: "10px", fontFamily: "monospace", fontSize: 13,
               background: "#fff", marginBottom: 10, boxSizing: "border-box",
+              minHeight: "44px",
             }}>
               {DAYS.map((d, i) => <option key={d} value={i}>{d}</option>)}
             </select>
@@ -176,27 +182,30 @@ export function EventModal({ accent, onClose, onAdd, defaultFrom, defaultTo }) {
             <label style={{ fontSize: 10, color: "#888", display: "block", marginBottom: 3, letterSpacing: 1, textTransform: "uppercase" }}>From</label>
             <input type="date" value={from} onChange={e => setFrom(e.target.value)} style={{
               width: "100%", border: `1.5px solid ${accent}44`, borderRadius: 4,
-              padding: "6px 8px", fontFamily: "monospace", fontSize: 12,
+              padding: "10px", fontFamily: "monospace", fontSize: 13,
               background: "#fff", boxSizing: "border-box",
+              minHeight: "44px",
             }}/>
           </div>
           <div style={{ flex: 1 }}>
             <label style={{ fontSize: 10, color: "#888", display: "block", marginBottom: 3, letterSpacing: 1, textTransform: "uppercase" }}>To</label>
             <input type="date" value={to} onChange={e => setTo(e.target.value)} style={{
               width: "100%", border: `1.5px solid ${accent}44`, borderRadius: 4,
-              padding: "6px 8px", fontFamily: "monospace", fontSize: 12,
+              padding: "10px", fontFamily: "monospace", fontSize: 13,
               background: "#fff", boxSizing: "border-box",
+              minHeight: "44px",
             }}/>
           </div>
         </div>
 
         <label style={{ fontSize: 10, color: "#888", display: "block", marginBottom: 6, letterSpacing: 1, textTransform: "uppercase" }}>Color</label>
-        <div style={{ display: "flex", gap: 7, marginBottom: 16 }}>
+        <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
           {EVENT_COLORS.map(c => (
             <div key={c} onClick={() => setColor(c)} style={{
-              width: 20, height: 20, borderRadius: "50%", background: c, cursor: "pointer",
-              border: color === c ? "2.5px solid #333" : "2.5px solid transparent",
+              width: 32, height: 32, borderRadius: "50%", background: c, cursor: "pointer",
+              border: color === c ? "3px solid #333" : "3px solid transparent",
               transition: "border .1s",
+              flexShrink: 0,
             }}/>
           ))}
         </div>
@@ -204,7 +213,7 @@ export function EventModal({ accent, onClose, onAdd, defaultFrom, defaultTo }) {
         {error && (
           <div style={{
             background: "#fff0f0", border: "1px solid #fca5a5", borderRadius: 4,
-            padding: "7px 10px", marginBottom: 10,
+            padding: "10px", marginBottom: 10,
             fontSize: 11, color: "#dc2626", fontFamily: "monospace",
           }}>
             ⚠ {error}
@@ -214,13 +223,15 @@ export function EventModal({ accent, onClose, onAdd, defaultFrom, defaultTo }) {
         <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
           <button onClick={onClose} style={{
             background: "none", border: "1px solid #ddd", borderRadius: 4,
-            padding: "5px 14px", fontSize: 12, cursor: "pointer",
+            padding: "10px 16px", fontSize: 12, cursor: "pointer",
             color: "#aaa", fontFamily: "monospace",
+            minHeight: "44px",
           }}>Cancel</button>
           <button onClick={submit} style={{
             background: accent, color: "#fff", border: "none", borderRadius: 4,
-            padding: "5px 18px", fontSize: 12, cursor: "pointer",
+            padding: "10px 20px", fontSize: 12, cursor: "pointer",
             fontFamily: "monospace", fontWeight: "bold",
+            minHeight: "44px",
           }}>Add ✓</button>
         </div>
       </div>
