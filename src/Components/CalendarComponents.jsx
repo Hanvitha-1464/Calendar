@@ -14,10 +14,7 @@ export function SpiralBinding({ accent, pinColor }) {
       position: "relative",
     }}>
       {[...Array(15)].map((_, i) => (
-        <div
-          key={i}
-          style={{ width: 24, height: 32, position: "relative", transition: "transform 0.2s ease" }}
-        >
+        <div key={i} style={{ width: 24, height: 32, position: "relative" }}>
           <div style={{
             position: "absolute", top: 0, left: "50%",
             transform: "translateX(-50%)",
