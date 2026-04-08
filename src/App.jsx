@@ -1,4 +1,4 @@
-import Calendar from "./Components/Calendar";
+import Calendar from "./Components/WallCalendar";
 
 export default function App() {
   return (
