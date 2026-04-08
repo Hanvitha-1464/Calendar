@@ -13,7 +13,6 @@ It allows users to manage notes, events, and daily activities with a visually ae
 * Monthly calendar view
 * Smooth page flip animation
 * Month-specific themes
-* Mobile-friendly layout
 * Notes section shifts below calendar on small screens
 
 ### Notes System

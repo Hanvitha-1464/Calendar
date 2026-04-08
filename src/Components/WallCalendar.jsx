@@ -269,7 +269,7 @@ export default function WallCalendar() {
         }}>
           <SpiralBinding accent={accent} pinColor={theme.pin} />
 
-          {/* ── Hero image ── */}
+          {/* Hero image*/}
           <div className="cal-hero" style={{ 
             position: "relative", 
             height: isMobile ? 140 : 175, 
@@ -301,7 +301,7 @@ export default function WallCalendar() {
 
           <MoodStrip mood={theme.mood} quote={theme.quote} accent={accent} />
 
-          {/* ── Month nav bar ── */}
+          {/*Month nav bar*/}
           <div style={{
             display: "flex", alignItems: "center", justifyContent: "space-between",
             padding: isMobile ? "10px 12px" : "8px 16px", 
@@ -337,10 +337,10 @@ export default function WallCalendar() {
             }}>›</button>
           </div>
 
-          {/* ── Body: grid + sidebar ── */}
+          {/*Body: grid + sidebar*/}
           <div style={{ display: "flex", flexDirection: "row" }} onClick={handleCalendarClick}>
 
-            {/* ── Calendar grid ── */}
+            {/*Calendar grid*/}
             <div className="cal-grid calendar-bg" style={{ 
               flex: 1, 
               padding: isMobile ? "12px" : "10px 14px 14px", 
@@ -493,7 +493,7 @@ export default function WallCalendar() {
               </div>
             </div>
 
-            {/* ── Desktop Sidebar ── */}
+            {/*Desktop Sidebar*/}
             <div className="cal-notes desktop-sidebar" style={{
               width: 190, 
               background: "#f7f4ef",
@@ -526,7 +526,7 @@ export default function WallCalendar() {
         </div>
       </div>
 
-      {/* ── Mobile Sidebar (Bottom Sheet) ── */}
+      {/*Mobile Sidebar (Bottom Sheet)*/}
       {isMobile && showSidebar && (
         <>
           <div className="sidebar-overlay" onClick={() => setShowSidebar(false)} />
@@ -593,7 +593,6 @@ export default function WallCalendar() {
   );
 }
 
-// Extracted sidebar content component to avoid duplication
 function SidebarContent({
   accent, activeNote, noteInput, setNoteInput, noteRef,
   saveNote, deleteNote, noteEntries, setActiveNote, setSelectedDate,
