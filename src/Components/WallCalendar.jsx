@@ -3,7 +3,7 @@ import {
   MONTH_THEMES, HOLIDAYS, DAYS,
   LS_NOTES, LS_EVENTS, LS_CROSSED,
   getDaysInMonth, getFirstDay, pad, toKey, holKey, keyToDate,
-} from "./constants";
+} from "./Constants";
 import { SpiralBinding, PageCorner, MoodStrip, EventModal } from "./CalendarComponents";
 
 export default function WallCalendar() {
