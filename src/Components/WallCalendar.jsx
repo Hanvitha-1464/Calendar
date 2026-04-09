@@ -157,9 +157,6 @@ export default function WallCalendar() {
     ? { animation: `calFlip${flipDir > 0 ? "Fwd" : "Bck"} .44s ease both` }
     : {};
 
-  // On mobile, sidebar sits BELOW the calendar grid (not as overlay, not hidden)
-  // On desktop (>=768px), sidebar sits to the RIGHT as a column
-
   return (
     <div style={{
       minHeight: "100vh",
@@ -191,7 +188,7 @@ export default function WallCalendar() {
         .crossed-mark {
           position: absolute; top: 50%; left: 50%;
           transform: translate(-50%, -50%);
-          font-size: 24px; font-weight: bold;
+          font-size: 18px; font-weight: bold;
           color: #e74c3c; pointer-events: none;
           z-index: 2; text-shadow: 0 0 3px white;
         }
@@ -217,12 +214,12 @@ export default function WallCalendar() {
           boxShadow: isMobile ? "none" : "0 30px 80px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.05)",
           overflow: "hidden",
         }}>
-          <SpiralBinding accent={accent} pinColor={theme.pin} />
+          <SpiralBinding accent={accent} pinColor={theme.pin} isMobile={isMobile} />
 
-          {/* Hero image */}
+          {/* Hero image — reduced height on mobile */}
           <div style={{
             position: "relative",
-            height: isMobile ? 140 : 175,
+            height: isMobile ? 100 : 175,   // ← was 140
             overflow: "hidden",
             background: "#111",
           }}>
@@ -239,37 +236,37 @@ export default function WallCalendar() {
             <div style={{
               position: "absolute", bottom: 0, right: 0,
               background: accent, color: "#fff",
-              padding: isMobile ? "10px 20px 10px 28px" : "12px 26px 12px 34px",
+              padding: isMobile ? "7px 16px 7px 22px" : "12px 26px 12px 34px",  // ← reduced
               clipPath: "polygon(10% 0%,100% 0%,100% 100%,0% 100%)",
               textAlign: "right",
             }}>
-              <p style={{ fontSize: 10, opacity: .8, letterSpacing: 2.5, fontFamily: "monospace", margin: "0 0 2px" }}>{year}</p>
-              <p style={{ fontSize: isMobile ? 16 : 19, fontWeight: "bold", letterSpacing: 2.5, margin: 0, lineHeight: 1 }}>{theme.label.toUpperCase()}</p>
+              <p style={{ fontSize: 9, opacity: .8, letterSpacing: 2, fontFamily: "monospace", margin: "0 0 1px" }}>{year}</p>
+              <p style={{ fontSize: isMobile ? 13 : 19, fontWeight: "bold", letterSpacing: 2, margin: 0, lineHeight: 1 }}>{theme.label.toUpperCase()}</p>
             </div>
             <PageCorner accent={accent} onClick={() => navigate(1)} />
           </div>
 
-          <MoodStrip mood={theme.mood} quote={theme.quote} accent={accent} />
+          <MoodStrip mood={theme.mood} quote={theme.quote} accent={accent} isMobile={isMobile} />
 
-          {/* Month nav bar */}
+          {/* Month nav bar — reduced padding on mobile */}
           <div style={{
             display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: isMobile ? "10px 12px" : "8px 16px",
+            padding: isMobile ? "6px 10px" : "8px 16px",   // ← was "10px 12px"
             background: "#f0ede8",
             borderBottom: "1px solid #e0dbd4",
           }}>
             <button className="nav-btn" onClick={() => navigate(-1)} style={{
               background: "none", border: "none", cursor: "pointer",
-              fontSize: isMobile ? 28 : 22,
+              fontSize: isMobile ? 24 : 22,   // ← was 28
               color: "#555",
-              padding: isMobile ? "4px 16px" : "2px 14px",
+              padding: isMobile ? "2px 12px" : "2px 14px",  // ← was "4px 16px"
               borderRadius: 4,
-              minHeight: "44px",
-              minWidth: "44px",
+              minHeight: isMobile ? "36px" : "auto",  // ← was 44px
+              minWidth: isMobile ? "36px" : "auto",
             }}>‹</button>
             <div style={{
               fontFamily: "monospace",
-              fontSize: isMobile ? 12 : 14,
+              fontSize: isMobile ? 11 : 14,   // ← was 12
               color: "#333",
               letterSpacing: isMobile ? 2 : 3,
               fontWeight: "bold",
@@ -278,21 +275,15 @@ export default function WallCalendar() {
             </div>
             <button className="nav-btn" onClick={() => navigate(1)} style={{
               background: "none", border: "none", cursor: "pointer",
-              fontSize: isMobile ? 28 : 22,
+              fontSize: isMobile ? 24 : 22,
               color: "#555",
-              padding: isMobile ? "4px 16px" : "2px 14px",
+              padding: isMobile ? "2px 12px" : "2px 14px",
               borderRadius: 4,
-              minHeight: "44px",
-              minWidth: "44px",
+              minHeight: isMobile ? "36px" : "auto",
+              minWidth: isMobile ? "36px" : "auto",
             }}>›</button>
           </div>
 
-          {/*
-            KEY FIX:
-            - Desktop (isMobile=false): flex-direction row → grid on left, sidebar on right
-            - Mobile (isMobile=true): flex-direction column → grid on top, sidebar BELOW
-            No CSS classes, no display:none — purely driven by isMobile state.
-          */}
           <div
             style={{
               display: "flex",
@@ -305,19 +296,19 @@ export default function WallCalendar() {
               className="cal-grid calendar-bg"
               style={{
                 flex: 1,
-                padding: isMobile ? "12px" : "10px 14px 14px",
+                padding: isMobile ? "8px" : "10px 14px 14px",  // ← was "12px"
                 minWidth: 0,
               }}
             >
               {/* Day headers */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", marginBottom: 6 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", marginBottom: 4 }}>  {/* ← marginBottom was 6 */}
                 {DAYS.map(d => (
                   <div key={d} style={{
                     textAlign: "center",
-                    fontSize: isMobile ? 9 : 10,
+                    fontSize: isMobile ? 8 : 10,   // ← was 9
                     fontWeight: "bold",
                     letterSpacing: 1,
-                    padding: "4px 0",
+                    padding: "3px 0",   // ← was "4px 0"
                     fontFamily: "monospace",
                     color: (d === "Sun" || d === "Sat") ? accent : "#aaa",
                   }}>{d}</div>
@@ -328,7 +319,7 @@ export default function WallCalendar() {
               <div className="days-grid" style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(7,1fr)",
-                gap: isMobile ? 3 : 2,
+                gap: isMobile ? 2 : 2,   // ← was 3 on mobile
               }}>
                 {Array.from({ length: firstDay }).map((_, i) => <div key={`e${i}`} />)}
                 {Array.from({ length: totalDays }, (_, i) => i + 1).map(day => {
@@ -348,17 +339,17 @@ export default function WallCalendar() {
                         flexDirection: "column",
                         alignItems: "center",
                         justifyContent: "center",
-                        borderRadius: isMobile ? 6 : 4,
+                        borderRadius: isMobile ? 4 : 4,   // ← was 6
                         background: isSelected ? `${accent}33` : (isToday ? `${accent}14` : "transparent"),
                         border: isSelected ? `2px solid ${accent}` : (isToday ? `1.5px solid ${accent}66` : "1.5px solid transparent"),
                         color: isWeekend ? accent : "#333",
                         cursor: "pointer",
-                        fontSize: isMobile ? 13 : 13,
+                        fontSize: isMobile ? 11 : 13,   // ← was 13 on mobile
                         fontWeight: isToday ? "bold" : "normal",
                         transition: "transform .12s ease, background .12s ease",
                         userSelect: "none",
                         opacity: isCrossed ? 0.5 : 1,
-                        minHeight: isMobile ? "44px" : "auto",
+                        minHeight: isMobile ? "36px" : "auto",  // ← was 44px
                       }}
                     >
                       {day}
@@ -367,16 +358,16 @@ export default function WallCalendar() {
                       {/* Dots row */}
                       <div style={{
                         display: "flex",
-                        gap: isMobile ? 2.5 : 2,
-                        marginTop: 3,
+                        gap: 2,
+                        marginTop: 2,   // ← was 3
                         flexWrap: "wrap",
                         justifyContent: "center",
-                        minHeight: isMobile ? 8 : 7,
+                        minHeight: isMobile ? 5 : 7,  // ← was 8
                       }}>
                         {evDots.slice(0, 3).map((ev, i) => (
                           <span key={i} style={{
-                            width: isMobile ? 6 : 5,
-                            height: isMobile ? 6 : 5,
+                            width: isMobile ? 4 : 5,   // ← was 6
+                            height: isMobile ? 4 : 5,
                             borderRadius: "50%",
                             background: ev.color,
                             display: "inline-block",
@@ -385,8 +376,8 @@ export default function WallCalendar() {
                         ))}
                         {hasNote && (
                           <span style={{
-                            width: isMobile ? 6 : 5,
-                            height: isMobile ? 6 : 5,
+                            width: isMobile ? 4 : 5,
+                            height: isMobile ? 4 : 5,
                             borderRadius: "50%",
                             background: "#333",
                             display: "inline-block",
@@ -395,8 +386,8 @@ export default function WallCalendar() {
                         )}
                         {holiday && (
                           <span style={{
-                            width: isMobile ? 6 : 5,
-                            height: isMobile ? 6 : 5,
+                            width: isMobile ? 4 : 5,
+                            height: isMobile ? 4 : 5,
                             borderRadius: "50%",
                             background: "#e74c3c",
                             display: "inline-block",
@@ -411,38 +402,38 @@ export default function WallCalendar() {
 
               {/* Action buttons */}
               <div style={{
-                marginTop: isMobile ? 16 : 10,
+                marginTop: isMobile ? 10 : 10,  // ← was 16
                 display: "flex",
-                gap: isMobile ? 8 : 6,
+                gap: isMobile ? 6 : 6,
                 flexWrap: "wrap",
               }}>
                 <button onClick={() => setShowModal(true)} style={{
-                  fontSize: isMobile ? 11 : 10,
+                  fontSize: isMobile ? 10 : 10,   // ← was 11
                   fontFamily: "monospace",
                   background: "none",
                   border: `1px dashed ${accent}66`,
                   borderRadius: 4,
-                  padding: isMobile ? "8px 14px" : "4px 12px",
+                  padding: isMobile ? "6px 10px" : "4px 12px",  // ← was "8px 14px"
                   cursor: "pointer",
                   color: accent,
                   transition: "background .15s",
-                  minHeight: "44px",
+                  minHeight: "36px",  // ← was 44px
                 }}>+ New event</button>
 
                 <button
                   onClick={handleCrossSelectedDate}
                   disabled={!selectedDate}
                   style={{
-                    fontSize: isMobile ? 11 : 10,
+                    fontSize: isMobile ? 10 : 10,
                     fontFamily: "monospace",
                     background: selectedDate ? (isSelectedCrossed ? "#27ae60" : "#e74c3c") : "#ccc",
                     border: "none",
                     borderRadius: 4,
-                    padding: isMobile ? "8px 14px" : "4px 12px",
+                    padding: isMobile ? "6px 10px" : "4px 12px",
                     cursor: selectedDate ? "pointer" : "not-allowed",
                     color: "white",
                     transition: "background .15s",
-                    minHeight: "44px",
+                    minHeight: "36px",  // ← was 44px
                     flex: isMobile ? 1 : "0 1 auto",
                   }}
                 >
@@ -455,20 +446,17 @@ export default function WallCalendar() {
               </div>
             </div>
 
-            {/* Sidebar — renders BELOW grid on mobile, to the RIGHT on desktop */}
+            {/* Sidebar */}
             <div
               style={{
-                // Desktop: fixed width column on the right
-                // Mobile: full width section below the grid
                 width: isMobile ? "100%" : 190,
                 background: "#f7f4ef",
                 borderLeft: isMobile ? "none" : "1px solid #e0dbd4",
                 borderTop: isMobile ? "1px solid #e0dbd4" : "none",
-                padding: isMobile ? "16px" : "12px 10px",
+                padding: isMobile ? "12px" : "12px 10px",  // ← was "16px"
                 display: "flex",
                 flexDirection: "column",
                 gap: 8,
-                // On desktop, constrain height and scroll; on mobile let it expand naturally
                 maxHeight: isMobile ? "none" : 500,
                 overflowY: isMobile ? "visible" : "auto",
                 boxSizing: "border-box",
@@ -506,7 +494,7 @@ function SidebarContent({
   return (
     <>
       <p style={{
-        fontSize: isMobile ? 10 : 9,
+        fontSize: isMobile ? 9 : 9,
         fontWeight: "bold",
         letterSpacing: 3,
         margin: "0 0 2px",
@@ -520,7 +508,7 @@ function SidebarContent({
       {activeNote ? (
         <>
           <span style={{
-            fontSize: isMobile ? 11 : 10,
+            fontSize: isMobile ? 10 : 10,
             color: accent,
             fontFamily: "monospace",
             fontWeight: "bold",
@@ -530,20 +518,20 @@ function SidebarContent({
             value={noteInput}
             onChange={e => setNoteInput(e.target.value)}
             placeholder="Jot something down…"
-            rows={isMobile ? 4 : 4}
+            rows={isMobile ? 3 : 4}   // ← was 4
             style={{
               width: "100%",
               resize: "vertical",
               border: `1.5px solid ${accent}44`,
               borderRadius: 4,
-              padding: isMobile ? "10px" : "7px 8px",
+              padding: isMobile ? "8px" : "7px 8px",   // ← was "10px"
               fontFamily: "Georgia,serif",
-              fontSize: isMobile ? 14 : 12,
+              fontSize: isMobile ? 13 : 12,   // ← was 14
               color: "#333",
               background: "#fff",
               lineHeight: 1.65,
               boxSizing: "border-box",
-              minHeight: isMobile ? "100px" : "auto",
+              minHeight: isMobile ? "80px" : "auto",   // ← was 100px
             }}
             onFocus={e => {
               e.target.style.borderColor = accent;
@@ -559,31 +547,31 @@ function SidebarContent({
               background: "none",
               border: "1px solid #ddd",
               borderRadius: 4,
-              padding: isMobile ? "10px 14px" : "4px 10px",
-              fontSize: isMobile ? 12 : 11,
+              padding: isMobile ? "6px 12px" : "4px 10px",   // ← was "10px 14px"
+              fontSize: isMobile ? 11 : 11,
               cursor: "pointer",
               color: "#aaa",
               fontFamily: "monospace",
-              minHeight: "44px",
+              minHeight: "36px",   // ← was 44px
             }}>Delete</button>
             <button className="save-btn" onClick={saveNote} style={{
               background: accent,
               color: "#fff",
               border: "none",
               borderRadius: 4,
-              padding: isMobile ? "10px 18px" : "4px 14px",
-              fontSize: isMobile ? 12 : 11,
+              padding: isMobile ? "6px 14px" : "4px 14px",   // ← was "10px 18px"
+              fontSize: isMobile ? 11 : 11,
               cursor: "pointer",
               fontFamily: "monospace",
               letterSpacing: .5,
               fontWeight: "bold",
-              minHeight: "44px",
+              minHeight: "36px",   // ← was 44px
             }}>Save ✓</button>
           </div>
         </>
       ) : (
         <p style={{
-          fontSize: isMobile ? 13 : 12,
+          fontSize: isMobile ? 12 : 12,
           color: "#ccc",
           fontFamily: "Georgia,serif",
           lineHeight: 1.7,
@@ -595,9 +583,9 @@ function SidebarContent({
 
       {noteEntries.length > 0 && (
         <>
-          <div style={{ height: 1, background: `${accent}1e`, margin: "8px 0 4px" }} />
+          <div style={{ height: 1, background: `${accent}1e`, margin: "6px 0 4px" }} />
           <p style={{
-            fontSize: isMobile ? 10 : 9,
+            fontSize: 9,
             letterSpacing: 2,
             color: "#ccc",
             fontFamily: "monospace",
@@ -606,7 +594,7 @@ function SidebarContent({
           }}>
             Saved ({noteEntries.length})
           </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
             {noteEntries.sort(([a], [b]) => a.localeCompare(b)).map(([k, v]) => (
               <div
                 key={k}
@@ -619,41 +607,41 @@ function SidebarContent({
                 style={{
                   background: "#fff",
                   borderLeft: `3px solid ${accent}`,
-                  padding: isMobile ? "8px 36px 8px 10px" : "5px 20px 5px 8px",
+                  padding: isMobile ? "6px 30px 6px 8px" : "5px 20px 5px 8px",  // ← was "8px 36px 8px 10px"
                   borderRadius: "0 4px 4px 0",
                   cursor: "pointer",
                   transition: "background .15s",
                   position: "relative",
-                  minHeight: isMobile ? "44px" : "auto",
+                  minHeight: isMobile ? "36px" : "auto",  // ← was 44px
                 }}
               >
                 <div style={{
-                  fontSize: isMobile ? 10 : 9,
+                  fontSize: 9,
                   color: accent,
                   fontFamily: "monospace",
                   fontWeight: "bold",
-                  marginBottom: 3,
+                  marginBottom: 2,
                 }}>{k}</div>
                 <div style={{
-                  fontSize: isMobile ? 12 : 11,
+                  fontSize: isMobile ? 11 : 11,
                   color: "#555",
                   fontFamily: "Georgia,serif",
                   lineHeight: 1.4,
                 }}>
-                  {v.slice(0, isMobile ? 80 : 55)}{v.length > (isMobile ? 80 : 55) ? "…" : ""}
+                  {v.slice(0, isMobile ? 70 : 55)}{v.length > (isMobile ? 70 : 55) ? "…" : ""}
                 </div>
                 <span
                   onClick={e => { e.stopPropagation(); deleteNote(k); }}
                   style={{
                     position: "absolute",
                     top: "50%",
-                    right: isMobile ? 10 : 6,
+                    right: isMobile ? 8 : 6,
                     transform: "translateY(-50%)",
-                    fontSize: isMobile ? 16 : 10,
+                    fontSize: isMobile ? 13 : 10,  // ← was 16
                     color: "#999",
                     cursor: "pointer",
                     lineHeight: 1,
-                    padding: "4px 6px",
+                    padding: "4px 4px",
                   }}
                 >✕</span>
               </div>
@@ -664,9 +652,9 @@ function SidebarContent({
 
       {visibleEvents.length > 0 && (
         <>
-          <div style={{ height: 1, background: `${accent}1e`, margin: "8px 0 4px" }} />
+          <div style={{ height: 1, background: `${accent}1e`, margin: "6px 0 4px" }} />
           <p style={{
-            fontSize: isMobile ? 10 : 9,
+            fontSize: 9,
             letterSpacing: 2,
             color: "#ccc",
             fontFamily: "monospace",
@@ -679,31 +667,31 @@ function SidebarContent({
             <div key={idx} style={{
               display: "flex",
               alignItems: "flex-start",
-              gap: 8,
+              gap: 6,
               position: "relative",
-              paddingRight: isMobile ? 40 : 20,
-              minHeight: isMobile ? "44px" : "auto",
+              paddingRight: isMobile ? 28 : 20,
+              minHeight: isMobile ? "32px" : "auto",  // ← was 44px
             }}>
               <span style={{
-                width: isMobile ? 10 : 8,
-                height: isMobile ? 10 : 8,
+                width: isMobile ? 8 : 8,
+                height: isMobile ? 8 : 8,
                 borderRadius: "50%",
                 background: ev.color,
-                marginTop: isMobile ? 4 : 2,
+                marginTop: 2,
                 flexShrink: 0,
               }} />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{
-                  fontSize: isMobile ? 11 : 10,
+                  fontSize: isMobile ? 10 : 10,
                   fontWeight: "bold",
                   color: ev.color,
                   fontFamily: "monospace",
                 }}>{ev.label}</div>
                 <div style={{
-                  fontSize: isMobile ? 10 : 9,
+                  fontSize: 9,
                   color: "#aaa",
                   fontFamily: "monospace",
-                  marginTop: 2,
+                  marginTop: 1,
                 }}>
                   {ev.from} → {ev.to}
                   {ev.type === "repeat" && ` · every ${DAYS[ev.weekday]}`}
@@ -716,7 +704,7 @@ function SidebarContent({
                   top: "50%",
                   right: 0,
                   transform: "translateY(-50%)",
-                  fontSize: isMobile ? 16 : 11,
+                  fontSize: isMobile ? 13 : 11,  // ← was 16
                   color: "#999",
                   cursor: "pointer",
                   background: "none",
@@ -724,7 +712,7 @@ function SidebarContent({
                   fontWeight: "bold",
                   opacity: 0.5,
                   transition: "opacity 0.2s",
-                  padding: "4px 6px",
+                  padding: "4px 4px",
                 }}
                 onMouseEnter={e => e.target.style.opacity = 1}
                 onMouseLeave={e => e.target.style.opacity = 0.5}
@@ -736,9 +724,9 @@ function SidebarContent({
 
       {monthHols.length > 0 && (
         <>
-          <div style={{ height: 1, background: `${accent}1e`, margin: "8px 0 4px" }} />
+          <div style={{ height: 1, background: `${accent}1e`, margin: "6px 0 4px" }} />
           <p style={{
-            fontSize: isMobile ? 10 : 9,
+            fontSize: 9,
             letterSpacing: 2,
             color: "#ccc",
             fontFamily: "monospace",
@@ -749,17 +737,17 @@ function SidebarContent({
           </p>
           {monthHols.map(({ day, label }) => (
             <div key={day} style={{
-              fontSize: isMobile ? 11 : 10,
+              fontSize: isMobile ? 10 : 10,
               color: "#777",
               fontFamily: "monospace",
               display: "flex",
               gap: 8,
-              padding: isMobile ? "4px 0" : "0",
+              padding: isMobile ? "2px 0" : "0",  // ← was "4px 0"
             }}>
               <span style={{
                 color: accent,
                 fontWeight: "bold",
-                minWidth: isMobile ? 24 : 18,
+                minWidth: isMobile ? 20 : 18,
               }}>{day}</span>
               <span>{label}</span>
             </div>
